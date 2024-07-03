@@ -1,20 +1,21 @@
 import os
 import shutil
 import sys
+from pathlib import Path
 
 # Configuration variable
 
 # This variable is the path to the solidworks output folder of urdf files
-source_dir = '/home/sxm/Project/ros/test_urdf/'
+source_dir = '/mnt/hgfs/share/workspaces/Assem3.SLDASM'
 
 # This variable is the package path of ros2
-target_dir = '/home/sxm/Project/ros/test_urdf_tool_ws/src/test_urdf_tool/'
+target_dir = '/mnt/hgfs/share/workspaces/test_urdf_tool_ws/src/test_urdf_tool/'
 
 # This variable is the package-name of ros2
-package_name = "test_urdf_tool"
+package_name = Path(target_dir).name
 
 # This variable is the solidworks output folder name
-output_folder_name = "test_urdf"
+output_folder_name = Path(source_dir).name
 
 
 def run_command_dir(command_dir, command):
@@ -34,8 +35,13 @@ def replace_str(file, old_str, new_str):
 
 if __name__ == '__main__':
     # Create folders
-    run_command_dir(target_dir, "mkdir launch meshes meshes/collision meshes/visual urdf")
-
+    run_command_dir(target_dir, "mkdir launch meshes meshes/collision meshes/visual urdf rviz")
+    
+    # get current dir
+    current_dir = os.getcwd()
+    print(f"current dir {current_dir}")
+    # copy rviz file
+    shutil.copy(f'{current_dir}/replace_files/view.rviz', f'{target_dir}/rviz/view.rviz')
     # Copy files
     # Copy stl files
     run_command_dir(source_dir, "cp -r ./meshes/* " + target_dir + "meshes/visual")
